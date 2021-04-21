@@ -3,6 +3,7 @@ package com.example.justjava;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,12 +23,29 @@ public class MainActivity extends AppCompatActivity {
      */
     public void submitOrder(View view)
     {
+        // Reads name from EditText Field
+        EditText nameField = (EditText) findViewById(R.id.name_field);
+        String name = nameField.getText().toString();
+        // getText() has return data type is 'Editable'.
+        // toString() is called on the Editable object to make return type as String because Editable object cannot be stored in a String variable.
+        // toString() returns a String that can be stored in name object.
+        // nameField.getText().toString();  This is called Chaining method calls.
+        // Log message is used to check that the code is working or not.
+        // Log message is added to verify that the 'name' actually calls the 'name_field'.
+        // Log.v("MainActivity", "Name: " + name);
+
+        // Figure out if the user wants whipped cream toppinig
         CheckBox whippedCreamCheckBox = (CheckBox) findViewById(R.id.whipped_cream_checkbox);
         boolean hasWhippedCream = whippedCreamCheckBox.isChecked();
-        //Log.v("MainActivity", "Has whipped cream: " + hasWhippedCream);
+
+        // Figure out if the user wants chocolate topping
+        CheckBox chocolateCheckbox = (CheckBox) findViewById(R.id.chocolate_checkbox);
+        boolean hasChocolate = chocolateCheckbox.isChecked();
+
+        // Log.v("MainActivity", "Has whipped cream: " + hasWhippedCream);
         int price=calculatePrice();
         // Log.v("MainActivity", "The price is "+ price);
-        String priceMessage=createOrderSummary(price, hasWhippedCream);
+        String priceMessage=createOrderSummary(name, price, hasWhippedCream, hasChocolate);
         displayMessage(priceMessage);
     }
 
@@ -38,21 +56,22 @@ public class MainActivity extends AppCompatActivity {
      */
     private int calculatePrice()
     {
-        int price=quantity*5;
-        return price;
+       return quantity*5;
     }
 
     /*
      * This method creates summary of the order.
      *
+     * @param name of the customer
      * @param price of the order
      * @param addWhippedCream is whether or not the user wants whipped cream topping
      * @return text summary
      */
-    private String createOrderSummary(int price, boolean addWhippedCream)
+    private String createOrderSummary(String name, int price, boolean addWhippedCream, boolean addChocolate)
     {
-       String priceMessage="Name: Kanika";
+       String priceMessage="Name: "+name;
        priceMessage+="\nAdd Whipped Cream? "+ addWhippedCream;
+       priceMessage+="\nAdd Chocolate? "+ addChocolate;
        priceMessage+="\nQuantity: "+quantity;
        priceMessage+="\nTotal: $"+price;
        priceMessage+="\nThank You!";
