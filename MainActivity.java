@@ -1,10 +1,13 @@
 package com.example.justjava;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         // Log message is added to verify that the 'name' actually calls the 'name_field'.
         // Log.v("MainActivity", "Name: " + name);
 
-        // Figure out if the user wants whipped cream toppinig
+        // Figure out if the user wants whipped cream topping
         CheckBox whippedCreamCheckBox = (CheckBox) findViewById(R.id.whipped_cream_checkbox);
         boolean hasWhippedCream = whippedCreamCheckBox.isChecked();
 
@@ -43,9 +46,21 @@ public class MainActivity extends AppCompatActivity {
         boolean hasChocolate = chocolateCheckbox.isChecked();
 
         // Log.v("MainActivity", "Has whipped cream: " + hasWhippedCream);
-        int price=calculatePrice();
+        int price=calculatePrice(hasWhippedCream,hasChocolate);
         // Log.v("MainActivity", "The price is "+ price);
         String priceMessage=createOrderSummary(name, price, hasWhippedCream, hasChocolate);
+
+        // To ensure that the intent is handled only by an email app (and not other text messaging of social apps),
+        // then use ACTION_SENDTO action and include "mailto:" data scheme.
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this.
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Just Java order for "+ name);
+        intent.putExtra(Intent.EXTRA_TEXT, priceMessage);
+        if(intent.resolveActivity(getPackageManager())!=null)
+        {
+            startActivity(intent);
+        }
+
         displayMessage(priceMessage);
     }
 
@@ -54,9 +69,25 @@ public class MainActivity extends AppCompatActivity {
      *
      * @returns total price
      */
-    private int calculatePrice()
+    private int calculatePrice(boolean addWhippedCream, boolean addChocolate)
     {
-       return quantity*5;
+        // Price of 1 cup of coffee
+        int basePrice = 5;
+
+        // Add $1 if the user wants whipped cream
+        if (addWhippedCream)
+        {
+            basePrice += 1;
+        }
+
+        // Add $2 if the user wants chocolate
+        if (addChocolate)
+        {
+            basePrice += 2;
+        }
+
+        // Calculate the total price by multiplying by quantity
+        return quantity*basePrice;
     }
 
     /*
@@ -83,6 +114,14 @@ public class MainActivity extends AppCompatActivity {
      */
     public void decrement(View view)
     {
+        if (quantity==1)
+        {
+            // To show an error message as a toast.
+            Toast.makeText(this, "You cannot have less than 1 coffee", Toast.LENGTH_SHORT).show();
+
+            // Exit this method early because there's nothing left to do.
+            return;
+        }
         quantity-=1;
         displayQuantity(quantity);
     }
@@ -92,6 +131,14 @@ public class MainActivity extends AppCompatActivity {
      */
     public void increment(View view)
     {
+        if (quantity==100)
+        {
+            // To show an error message as a toast.
+            Toast.makeText(this, "You cannot have more than 100 coffees", Toast.LENGTH_SHORT).show();
+
+            // Exit this method early because there's nothing left to do.
+            return;
+        }
         quantity+=1;
         displayQuantity(quantity);
     }
