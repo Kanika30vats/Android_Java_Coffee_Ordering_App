@@ -1,0 +1,46 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">Just Java</string>
+
+    <!-- Comment will help translator to understand the context in which the string is being used  in our app -->
+    <!-- Character limit is also helpful for the translator when space in UI is limited. -->
+    <!-- For example, a translator won't pick a really long translation if they understand that we have limited screen space -->
+    <!-- Header text for the list of toppings [CHAR LIMIT=20] -->
+    <string name="toppings">Toppings</string>
+
+    <!-- Thank you message for the order summary. [CHAR LIMIT=NONE] -->
+    <string name="thank_you">Thank You!</string>
+
+    <!--
+        Name for the order summary.
+        It will be shown in the format of "Name: Amy",
+        where Amy is the user's name. [CHAR LIMIT=NONE]
+    -->
+    <!--
+        We want Name to be translated but we don't want user's name (eg:Amy) to be translated.
+        Hence, we used xliff tag.
+        %s specifies that a string will be substituted in here later.
+    -->
+    <!--
+        The reason why we didn't add Strings using the plus sign is because:
+        declaring it as a string resource allows the translator to decide if this is the right format for the text.
+        The translator may decide to flip the order of the some of these words so that it makes more sense to the local context.
+        The translator don't have control over the java code.
+    -->
+    <string name="order_summary_name">Name: <xliff:g id="name" example="Amy">%s</xliff:g></string>
+
+    <string name="whipped_cream">Whipped Cream</string>
+    <string name="name">Name</string>
+    <string name="chocolate">Chocolate</string>
+    <string name="quantity">Quantity</string>
+    <string name="_2">2</string>
+    <string name="decrement">-</string>
+    <string name="increment">+</string>
+    <string name="order_summary">ORDER SUMMARY</string>
+    <string name="order">Order</string>
+    <string name="_10">$10</string>
+    <string name="order_summary_whipped_cream">\"\nAdd Whipped Cream? \"</string>
+    <string name="order_summary_chocolate">\"\nAdd Chocolate? \"</string>
+    <string name="order_summary_quantity">\"\nQuantity: \"</string>
+    <string name="order_summary_total">\nTotal: $</string>
+    <string name="order_summary_email_subject">\"Just Java order for \" <xliff:g id="email_subject">%s</xliff:g></string>
+</resources>
